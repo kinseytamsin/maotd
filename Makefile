@@ -12,7 +12,7 @@ install: mao.dat
 
 .PHONY: uninstall
 	rm -f $(FORTUNES)/mao*
-	rm -f $(DESTDIR)$(PREFIX)/bin
+	rm -f $(DESTDIR)$(PREFIX)/bin/maotd
 
 .PHONY: clean
 clean: mao.dat
