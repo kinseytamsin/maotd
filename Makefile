@@ -17,10 +17,7 @@ $(BUILD)/mao: | $(BUILD)
 
 $(BUILD)/maotd: | $(BUILD)
 	cp maotd $(BUILD)
-	awk '{ gsub("FORTUNE_FILE", "$(FORTUNEDEST)"); print }' $(BUILD)/maotd \
-		> $(BUILD)/tmp
-	cat $(BUILD)/tmp > $(BUILD)/maotd
-	rm $(BUILD)/tmp
+	sed -i 's;FORTUNE_FILE;$(DESTDIR)$(PREFIX)/share/mao;' $(BUILD)/maotd
 
 $(BUILD)/mao.dat: $(BUILD)/mao | $(BUILD)
 	strfile $(BUILD)/mao
