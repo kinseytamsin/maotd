@@ -4,8 +4,6 @@ BUILD = ./build
 FILES = mao mao.dat maotd
 TARGETS = $(addprefix $(BUILD)/, $(FILES))
 
-FORTUNEDEST = $(DESTDIR)$(PREFIX)/share/mao
-
 .PHONY: all
 all: $(TARGETS)
 
