@@ -10,6 +10,7 @@ China: Foreign Languages Press, 1972.
 Installation
 ------------
 
-Install maotd by running `make install`.
+Install maotd by running `sudo make install`. Conversely, uninstall by
+running `sudo make uninstall`.
 
 Address any questions or comments to Kinsey Favre <iyunkateus@gmail.com>.

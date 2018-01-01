@@ -1,19 +1,42 @@
 PREFIX = /usr/local
-FORTUNES = $(shell find /usr -type d -regex '.*fortunes?' -print -quit)
+BUILD = ./build
 
-mao.dat:
-	strfile mao
+FILES = mao mao.dat maotd
+TARGETS = $(addprefix $(BUILD)/, $(FILES))
+
+FORTUNEDEST = $(DESTDIR)$(PREFIX)/share/mao
+
+.PHONY: all
+all: $(TARGETS)
+
+$(BUILD):
+	mkdir $(BUILD)
+
+$(BUILD)/mao: | $(BUILD)
+	cp mao $(BUILD)
+
+$(BUILD)/maotd: | $(BUILD)
+	cp maotd $(BUILD)
+	awk '{ gsub("FORTUNE_FILE", "$(FORTUNEDEST)"); print }' $(BUILD)/maotd \
+		> $(BUILD)/tmp
+	cat $(BUILD)/tmp > $(BUILD)/maotd
+	rm $(BUILD)/tmp
+
+$(BUILD)/mao.dat: $(BUILD)/mao | $(BUILD)
+	strfile $(BUILD)/mao
 
 .PHONY: install
-install: mao.dat
-	sudo install -m 644 mao mao.dat $(FORTUNES)
+install: all
+	mkdir -p $(DESTDIR)$(PREFIX)/share
+	install -m 644 $(BUILD)/mao $(BUILD)/mao.dat $(DESTDIR)$(PREFIX)/share
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
-	sudo install -m 755 maotd $(DESTDIR)$(PREFIX)/bin
+	install -m 755 $(BUILD)/maotd $(DESTDIR)$(PREFIX)/bin
 
 .PHONY: uninstall
-	rm -f $(FORTUNES)/mao*
-	rm -f $(DESTDIR)$(PREFIX)/bin/maotd
+uninstall:
+	rm $(addprefix $(DESTDIR)$(PREFIX)/share/, mao mao.dat)
+	rm $(DESTDIR)$(PREFIX)/bin/maotd
 
 .PHONY: clean
-clean: mao.dat
-	rm mao.dat
+clean:
+	rm -rf $(BUILD)
